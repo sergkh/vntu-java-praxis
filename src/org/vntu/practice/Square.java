@@ -38,12 +38,6 @@ public class Square extends JFrame implements ActionListener {
         add(resultLabel);
         
         checkBtn.addActionListener(this);
-
-// also nice solution         
-//      checkBtn.addActionListener(new ActionListener() {
-//			public void actionPerformed(ActionEvent e) {}
-//		});
-        
         setDefaultCloseOperation(JDialog.EXIT_ON_CLOSE);
     }
 

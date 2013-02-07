@@ -1,8 +1,12 @@
+/* 
+ * Program calculates how many times each word appears in a text.
+ */
 package org.vntu.practice;
 
 import java.awt.*;
 import java.util.*;
 import javax.swing.*;
+import javax.swing.border.*;
 import java.awt.event.*;
 
 public class WordsCount extends JFrame {
@@ -11,44 +15,38 @@ public class WordsCount extends JFrame {
         setLayout(new BorderLayout());
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        JPanel leftPanel = new JPanel(new BorderLayout());    
-
-        leftPanel.add(new JLabel("Text: "), BorderLayout.NORTH);
+        add(new JLabel("Text: "), BorderLayout.NORTH);
 
         // final to access variable from ActionListener
-        final JTextArea textTa = new JTextArea(10, 20);
-        leftPanel.add(textTa, BorderLayout.CENTER);
+        final JTextArea textArea = new JTextArea(10, 20);
+        textArea.setLineWrap(true);
+        add(new JScrollPane(textArea), BorderLayout.CENTER);
 
         JButton btnCheck = new JButton("Count");
-        leftPanel.add(btnCheck, BorderLayout.EAST);
-
-        JPanel rightPanel = new JPanel(new BorderLayout());
-
-        rightPanel.add(new JLabel("Result: "), BorderLayout.NORTH);
-
-        final DefaultListModel listModel = new DefaultListModel();
-        JList list = new JList(listModel);
-
-        rightPanel.add(new JScrollPane(list), BorderLayout.CENTER);
+        add(btnCheck, BorderLayout.SOUTH);
 
         btnCheck.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                Map<String, Integer> uniqueWords = countUniqueWords(textTa.getText());
+                add(new JLabel("Result: "), BorderLayout.NORTH);
+
+                DefaultListModel listModel = new DefaultListModel();
+
+                Map<String, Integer> uniqueWords = countUniqueWords(textArea.getText());
 
                 for(String key: uniqueWords.keySet()) {
                     listModel.addElement(key + " : " + uniqueWords.get(key));
                 }
+
+                JComponent[] controls = new JComponent[] { new JScrollPane(new JList(listModel)) };
+                JOptionPane.showMessageDialog(WordsCount.this, controls, "Words count:", JOptionPane.PLAIN_MESSAGE);
             }
         });
-
-        add(leftPanel, BorderLayout.WEST);
-        add(rightPanel, BorderLayout.EAST);
 
         pack();
     }
 
     public Map<String, Integer> countUniqueWords(String text) {
-        String[] words = text.split("[\\p{Space},.;:!]+");
+        String[] words = text.toLowerCase().split("[\\p{Space},.;:!]+");
 
         Map<String, Integer> uniqueWords = new HashMap<String, Integer>();
 

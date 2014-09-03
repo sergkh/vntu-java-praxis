@@ -11,6 +11,7 @@ import java.net.MulticastSocket;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
@@ -32,15 +33,13 @@ public class MulticastChat extends JFrame implements Runnable {
 		setLayout(new BorderLayout());
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
-		add(chatArea, BorderLayout.CENTER);
+		add(new JScrollPane(chatArea), BorderLayout.CENTER);
 		
 		JPanel msgPane = new JPanel(new BorderLayout());
 		
 		msgPane.add(msgField, BorderLayout.CENTER);
 		
-		JButton sendBtn = new JButton("Send");
-		
-		sendBtn.addActionListener(new ActionListener() {
+		ActionListener sendAction = new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -49,7 +48,12 @@ public class MulticastChat extends JFrame implements Runnable {
 				send(message);
 				msgField.setText("");
 			}
-		});
+		};
+
+		msgField.addActionListener(sendAction);
+
+		JButton sendBtn = new JButton("Send");
+		sendBtn.addActionListener(sendAction);
 		
 		msgPane.add(sendBtn, BorderLayout.EAST);
 		
